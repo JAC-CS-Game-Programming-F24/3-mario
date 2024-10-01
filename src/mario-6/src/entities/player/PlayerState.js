@@ -173,8 +173,8 @@ export default class PlayerState extends State {
 
 		// Ensure velocity stays within the range [-maxSpeed, maxSpeed]
 		this.player.velocity.x = Math.max(
-			-maxSpeed,
-			Math.min(maxSpeed, this.player.velocity.x)
+			-PlayerConfig.maxSpeed,
+			Math.min(PlayerConfig.maxSpeed, this.player.velocity.x)
 		);
 
 		// Stop completely if velocity is very low
