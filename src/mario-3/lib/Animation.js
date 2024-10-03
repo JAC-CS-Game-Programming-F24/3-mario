@@ -1,4 +1,5 @@
 import Timer from './Timer.js';
+import Sprite from './Sprite.js';
 
 export default class Animation {
 	/**
@@ -8,7 +9,7 @@ export default class Animation {
 	 * of time has elapsed. This "frame" can be used to render different
 	 * sprites in a sprite sheet.
 	 *
-	 * @param {array} frames The indexes that reference sprite locations in a sprite sheet.
+	 * @param {Sprite[]} frames An array of frames to loop through.
 	 * @param {number} interval Switch to the next frame after this amount of time.
 	 */
 	constructor(frames, interval = 0, cycles = 0) {

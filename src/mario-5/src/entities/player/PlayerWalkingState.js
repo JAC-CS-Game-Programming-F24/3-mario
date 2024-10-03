@@ -18,9 +18,9 @@ export default class PlayerWalkingState extends PlayerState {
 
 	update(dt) {
 		super.update(dt);
+		this.checkTransitions();
 		this.handleInput();
 		this.handleHorizontalMovement();
-		this.checkTransitions();
 	}
 
 	handleInput() {
@@ -47,6 +47,7 @@ export default class PlayerWalkingState extends PlayerState {
 		}
 
 		if (this.shouldSkid()) {
+			this.player.facingRight = !this.player.facingRight;
 			this.player.stateMachine.change(PlayerStateName.Skidding);
 		}
 

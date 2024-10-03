@@ -153,32 +153,48 @@ export default class PlayerState extends State {
 	 * and applies acceleration, deceleration, and speed limits.
 	 */
 	handleHorizontalMovement() {
-		// Move left
-		if (input.isKeyHeld(Input.KEYS.A)) {
-			// Apply acceleration to the left, but don't exceed max speed
-			this.player.velocity.x = -PlayerConfig.maxSpeed;
+		if (input.isKeyHeld(Input.KEYS.A) && input.isKeyHeld(Input.KEYS.D)) {
+			this.slowDown();
+		} else if (input.isKeyHeld(Input.KEYS.A)) {
+			this.moveLeft();
 			this.player.facingRight = false;
-		}
-		// Move right
-		else if (input.isKeyHeld(Input.KEYS.D)) {
-			// Apply acceleration to the right, but don't exceed max speed
-			this.player.velocity.x = PlayerConfig.maxSpeed;
+		} else if (input.isKeyHeld(Input.KEYS.D)) {
+			this.moveRight();
 			this.player.facingRight = true;
-		}
-		// No horizontal input
-		else {
-			// Apply deceleration
-			this.player.velocity.x *= PlayerConfig.deceleration;
+		} else {
+			this.slowDown();
 		}
 
-		// Ensure velocity stays within the range [-maxSpeed, maxSpeed]
-		this.player.velocity.x = Math.max(
-			-PlayerConfig.maxSpeed,
-			Math.min(PlayerConfig.maxSpeed, this.player.velocity.x)
+		// Set speed to zero if it's close to zero to stop the player
+		if (Math.abs(this.player.velocity.x) < 0.1) this.player.velocity.x = 0;
+	}
+
+	moveRight() {
+		this.player.velocity.x = Math.min(
+			this.player.velocity.x + PlayerConfig.acceleration,
+			PlayerConfig.maxSpeed
 		);
+	}
 
-		// Stop completely if velocity is very low
-		if (Math.abs(this.player.velocity.x) < 1) this.player.velocity.x = 0;
+	moveLeft() {
+		this.player.velocity.x = Math.max(
+			this.player.velocity.x - PlayerConfig.acceleration,
+			-PlayerConfig.maxSpeed
+		);
+	}
+
+	slowDown() {
+		if (this.player.velocity.x > 0) {
+			this.player.velocity.x = Math.max(
+				0,
+				this.player.velocity.x - PlayerConfig.deceleration
+			);
+		} else if (this.player.velocity.x < 0) {
+			this.player.velocity.x = Math.min(
+				0,
+				this.player.velocity.x + PlayerConfig.deceleration
+			);
+		}
 	}
 
 	/**

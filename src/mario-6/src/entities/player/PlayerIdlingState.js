@@ -43,7 +43,8 @@ export default class PlayerIdlingState extends PlayerState {
 			this.player.stateMachine.change(PlayerStateName.Jumping);
 		}
 
-		if (input.isKeyHeld(Input.KEYS.A) || input.isKeyHeld(Input.KEYS.D)) {
+		// If the player is pressing A or D, not both, change to the walking state.
+		if (input.isKeyHeld(Input.KEYS.A) !== input.isKeyHeld(Input.KEYS.D)) {
 			this.player.stateMachine.change(PlayerStateName.Walking);
 		}
 	}

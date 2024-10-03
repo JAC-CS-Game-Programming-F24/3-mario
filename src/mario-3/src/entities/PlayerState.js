@@ -42,18 +42,48 @@ export default class PlayerState extends State {
 	}
 
 	handleHorizontalMovement() {
-		if (input.isKeyHeld(Input.KEYS.A)) {
-			this.player.velocity.x = -PlayerConfig.maxSpeed;
+		if (input.isKeyHeld(Input.KEYS.A) && input.isKeyHeld(Input.KEYS.D)) {
+			this.slowDown();
+		} else if (input.isKeyHeld(Input.KEYS.A)) {
+			this.moveLeft();
 			this.player.facingRight = false;
 		} else if (input.isKeyHeld(Input.KEYS.D)) {
-			this.player.velocity.x = PlayerConfig.maxSpeed;
+			this.moveRight();
 			this.player.facingRight = true;
 		} else {
-			this.player.velocity.x *= PlayerConfig.deceleration;
+			this.slowDown();
 		}
 
-		// Set speed to zero if it's close to zero
-		if (Math.abs(this.player.velocity.x) < 1) this.player.velocity.x = 0;
+		// Set speed to zero if it's close to zero to stop the player
+		if (Math.abs(this.player.velocity.x) < 0.1) this.player.velocity.x = 0;
+	}
+
+	moveRight() {
+		this.player.velocity.x = Math.min(
+			this.player.velocity.x + PlayerConfig.acceleration,
+			PlayerConfig.maxSpeed
+		);
+	}
+
+	moveLeft() {
+		this.player.velocity.x = Math.max(
+			this.player.velocity.x - PlayerConfig.acceleration,
+			-PlayerConfig.maxSpeed
+		);
+	}
+
+	slowDown() {
+		if (this.player.velocity.x > 0) {
+			this.player.velocity.x = Math.max(
+				0,
+				this.player.velocity.x - PlayerConfig.deceleration
+			);
+		} else if (this.player.velocity.x < 0) {
+			this.player.velocity.x = Math.min(
+				0,
+				this.player.velocity.x + PlayerConfig.deceleration
+			);
+		}
 	}
 
 	applyGravity(dt) {

@@ -1,5 +1,4 @@
 import PlayerState from './PlayerState.js';
-import { PlayerConfig } from '../../../config/PlayerConfig.js';
 import PlayerStateName from '../../enums/PlayerStateName.js';
 import { input } from '../../globals.js';
 import Input from '../../../lib/Input.js';
@@ -22,7 +21,6 @@ export default class PlayerSkiddingState extends PlayerState {
 	 * Called when entering the skidding state.
 	 */
 	enter() {
-		this.player.facingRight = Math.sign(this.player.velocity.x) < 0;
 		this.player.currentAnimation = this.player.animations.skid;
 	}
 
@@ -51,11 +49,9 @@ export default class PlayerSkiddingState extends PlayerState {
 		}
 	}
 
-	/**
-	 * Handles the skidding mechanics.
-	 */
 	handleSkidding() {
-		this.player.velocity.x *= PlayerConfig.turnAround;
+		this.slowDown();
+		if (Math.abs(this.player.velocity.x) < 0.1) this.player.velocity.x = 0;
 	}
 
 	/**

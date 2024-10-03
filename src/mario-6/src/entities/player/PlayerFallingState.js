@@ -29,7 +29,7 @@ export default class PlayerFallingState extends PlayerState {
 	update(dt) {
 		super.update(dt);
 
-		this.handleHorizontalMovement(dt);
+		this.handleHorizontalMovement();
 		this.checkTransitions();
 	}
 

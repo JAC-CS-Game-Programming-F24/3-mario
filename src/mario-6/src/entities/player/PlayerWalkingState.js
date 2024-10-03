@@ -34,9 +34,9 @@ export default class PlayerWalkingState extends PlayerState {
 	 */
 	update(dt) {
 		super.update(dt);
-		this.handleInput();
-		this.handleHorizontalMovement(dt);
 		this.checkTransitions();
+		this.handleInput();
+		this.handleHorizontalMovement();
 	}
 
 	/**
@@ -64,15 +64,12 @@ export default class PlayerWalkingState extends PlayerState {
 	 * Checks for state transitions.
 	 */
 	checkTransitions() {
-		if (
-			!this.isMovingLeft &&
-			!this.isMovingRight &&
-			Math.abs(this.player.velocity.x) < 0.1
-		) {
+		if (this.shouldIdle()) {
 			this.player.stateMachine.change(PlayerStateName.Idling);
 		}
 
 		if (this.shouldSkid()) {
+			this.player.facingRight = !this.player.facingRight;
 			this.player.stateMachine.change(PlayerStateName.Skidding);
 		}
 
@@ -95,6 +92,18 @@ export default class PlayerWalkingState extends PlayerState {
 			Math.abs(this.player.velocity.x) > PlayerConfig.skidThreshold &&
 			((input.isKeyHeld(Input.KEYS.A) && this.player.velocity.x > 0) ||
 				(input.isKeyHeld(Input.KEYS.D) && this.player.velocity.x < 0))
+		);
+	}
+
+	/**
+	 * Determines if the player should transition to the idling state.
+	 * @returns {boolean} True if the player should idle, false otherwise.
+	 */
+	shouldIdle() {
+		return (
+			!this.isMovingLeft &&
+			!this.isMovingRight &&
+			Math.abs(this.player.velocity.x) < 0.1
 		);
 	}
 }

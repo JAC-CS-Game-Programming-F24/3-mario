@@ -42,7 +42,7 @@ export default class PlayerJumpingState extends PlayerState {
 		super.update(dt);
 
 		this.handleInput();
-		this.handleHorizontalMovement(dt);
+		this.handleHorizontalMovement();
 		this.checkTransitions();
 		this.handleJumping(dt);
 	}

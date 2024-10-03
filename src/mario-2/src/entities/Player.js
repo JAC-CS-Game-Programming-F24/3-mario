@@ -71,32 +71,61 @@ export default class Player {
 		// Start skidding
 		if (this.shouldSkid()) {
 			this.isSkidding = true;
-			this.facingRight = Math.sign(this.velocity.x) < 0;
+			this.facingRight = !this.facingRight;
 		}
 
-		// Handle skidding
 		if (this.isSkidding) {
-			this.velocity.x *= PlayerConfig.turnAround; // Apply skid deceleration
+			this.slowDown();
 
 			// Check if skidding is complete
 			if (Math.abs(this.velocity.x) < 1) {
 				this.isSkidding = false;
 			}
+		} else if (
+			input.isKeyHeld(Input.KEYS.A) &&
+			input.isKeyHeld(Input.KEYS.D)
+		) {
+			this.slowDown();
+		} else if (input.isKeyHeld(Input.KEYS.A)) {
+			this.moveLeft();
+			this.facingRight = false;
+		} else if (input.isKeyHeld(Input.KEYS.D)) {
+			this.moveRight();
+			this.facingRight = true;
 		} else {
-			// Normal movement
-			if (input.isKeyHeld(Input.KEYS.A)) {
-				this.velocity.x = -PlayerConfig.maxSpeed;
-				this.facingRight = false;
-			} else if (input.isKeyHeld(Input.KEYS.D)) {
-				this.velocity.x = PlayerConfig.maxSpeed;
-				this.facingRight = true;
-			} else {
-				this.velocity.x *= PlayerConfig.deceleration;
-			}
+			this.slowDown();
 		}
 
-		// Set speed to zero if it's close to zero
-		if (Math.abs(this.velocity.x) < 1) this.velocity.x = 0;
+		// Set speed to zero if it's close to zero to stop the player
+		if (Math.abs(this.velocity.x) < 0.1) this.velocity.x = 0;
+	}
+
+	moveRight() {
+		this.velocity.x = Math.min(
+			this.velocity.x + PlayerConfig.acceleration,
+			PlayerConfig.maxSpeed
+		);
+	}
+
+	moveLeft() {
+		this.velocity.x = Math.max(
+			this.velocity.x - PlayerConfig.acceleration,
+			-PlayerConfig.maxSpeed
+		);
+	}
+
+	slowDown() {
+		if (this.velocity.x > 0) {
+			this.velocity.x = Math.max(
+				0,
+				this.velocity.x - PlayerConfig.deceleration
+			);
+		} else if (this.velocity.x < 0) {
+			this.velocity.x = Math.min(
+				0,
+				this.velocity.x + PlayerConfig.deceleration
+			);
+		}
 	}
 
 	shouldSkid() {
