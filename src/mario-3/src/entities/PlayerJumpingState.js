@@ -10,7 +10,6 @@ export default class PlayerJumpingState extends PlayerState {
 	}
 
 	enter() {
-		this.player.jumpTime = 0;
 		this.player.velocity.y = PlayerConfig.jumpPower;
 		this.player.currentAnimation = this.player.animations.jump;
 	}
@@ -22,28 +21,12 @@ export default class PlayerJumpingState extends PlayerState {
 
 		this.handleInput();
 		this.handleHorizontalMovement();
-		this.handleJumping(dt);
-
 		this.checkTransitions();
 	}
 
 	handleInput() {
 		if (!input.isKeyHeld(Input.KEYS.SPACE) && this.player.velocity.y < 0) {
 			this.player.velocity.y *= 0.5;
-		}
-	}
-
-	handleJumping(dt) {
-		if (
-			input.isKeyHeld(Input.KEYS.SPACE) &&
-			this.player.jumpTime <= PlayerConfig.maxJumpTime
-		) {
-			this.player.velocity.y =
-				PlayerConfig.jumpPower *
-				(1 - this.player.jumpTime / PlayerConfig.maxJumpTime);
-			this.player.jumpTime += dt;
-		} else {
-			this.player.jumpTime = 0;
 		}
 	}
 

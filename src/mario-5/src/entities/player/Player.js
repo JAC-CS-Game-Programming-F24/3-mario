@@ -23,7 +23,6 @@ export default class Player extends Entity {
 		this.dimensions = new Vector(width, height);
 		this.velocity = new Vector(0, 0);
 		this.map = map;
-		this.jumpTime = 0;
 		this.facingRight = true;
 
 		this.sprites = loadPlayerSprites(

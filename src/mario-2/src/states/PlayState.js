@@ -52,7 +52,6 @@ export default class PlayState extends State {
 			isOnGround: () => this.player.isOnGround,
 			isJumping: () => this.player.isJumping,
 			isSkidding: () => this.player.isSkidding,
-			jumpTime: () => this.player.jumpTime.toFixed(2),
 		});
 	}
 

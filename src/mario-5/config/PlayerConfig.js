@@ -7,7 +7,6 @@ export const PlayerConfig = {
 	jumpPower: -500,
 	gravity: 1000,
 	maxFallSpeed: 2000,
-	maxJumpTime: 0.5,
 	maxCoyoteTime: 0.1,
 	maxJumpBuffer: 0.1,
 	doubleJumpEnabled: false,

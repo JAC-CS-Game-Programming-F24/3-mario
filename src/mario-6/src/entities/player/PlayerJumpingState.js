@@ -23,7 +23,6 @@ export default class PlayerJumpingState extends PlayerState {
 	 * Called when entering the jumping state.
 	 */
 	enter() {
-		this.player.jumpTime = 0;
 		this.player.velocity.y = PlayerConfig.jumpPower;
 		this.player.currentAnimation = this.player.animations.jump;
 		sounds.play(SoundName.Jump);
@@ -44,7 +43,6 @@ export default class PlayerJumpingState extends PlayerState {
 		this.handleInput();
 		this.handleHorizontalMovement();
 		this.checkTransitions();
-		this.handleJumping(dt);
 	}
 
 	/**
@@ -53,24 +51,6 @@ export default class PlayerJumpingState extends PlayerState {
 	handleInput() {
 		if (!input.isKeyHeld(Input.KEYS.SPACE) && this.player.velocity.y < 0) {
 			this.player.velocity.y *= 0.5;
-		}
-	}
-
-	/**
-	 * Handles the jumping mechanics.
-	 * @param {number} dt - The time passed since the last update.
-	 */
-	handleJumping(dt) {
-		if (
-			input.isKeyHeld(Input.KEYS.SPACE) &&
-			this.player.jumpTime <= PlayerConfig.maxJumpTime
-		) {
-			this.player.velocity.y =
-				PlayerConfig.jumpPower *
-				(1 - this.player.jumpTime / PlayerConfig.maxJumpTime);
-			this.player.jumpTime += dt;
-		} else {
-			this.player.jumpTime = 0;
 		}
 	}
 

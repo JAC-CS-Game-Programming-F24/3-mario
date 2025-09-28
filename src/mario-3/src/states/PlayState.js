@@ -50,7 +50,6 @@ export default class PlayState extends State {
 					2
 				)}, ${this.player.velocity.y.toFixed(2)})`,
 			isOnGround: () => this.player.isOnGround,
-			jumpTime: () => this.player.jumpTime.toFixed(2),
 			state: () => this.player.stateMachine.currentState.name,
 		});
 	}

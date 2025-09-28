@@ -18,12 +18,27 @@ export const CANVAS_WIDTH = TILE_SIZE * 20;
 export const CANVAS_HEIGHT = TILE_SIZE * 15;
 
 const resizeCanvas = () => {
+	// Get the control panel element to calculate its height
+	const controlPanel = document.getElementById('controlPanel');
+	const controlPanelHeight = controlPanel ? controlPanel.offsetHeight : 200; // fallback to 200px
+
+	// Calculate available space for canvas (subtract control panel height)
+	const availableHeight = window.innerHeight - controlPanelHeight;
+
 	const scaleX = window.innerWidth / CANVAS_WIDTH;
-	const scaleY = window.innerHeight / CANVAS_HEIGHT;
+	const scaleY = availableHeight / CANVAS_HEIGHT;
 	const scale = Math.min(scaleX, scaleY); // Maintain aspect ratio
 
-	canvas.style.width = `${CANVAS_WIDTH * scale}px`;
-	canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
+	const canvasWidth = CANVAS_WIDTH * scale;
+	const canvasHeight = CANVAS_HEIGHT * scale;
+
+	canvas.style.width = `${canvasWidth}px`;
+	canvas.style.height = `${canvasHeight}px`;
+
+	// Set control panel width to match canvas width
+	if (controlPanel) {
+		controlPanel.style.width = `${canvasWidth}px`;
+	}
 };
 
 // Listen for canvas resize events

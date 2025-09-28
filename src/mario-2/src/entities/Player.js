@@ -16,7 +16,6 @@ export default class Player {
 		this.dimensions = new Vector(width, height);
 		this.velocity = new Vector(0, 0);
 		this.map = map;
-		this.jumpTime = 0;
 		this.isJumping = false;
 		this.isOnGround = false;
 		this.facingRight = true;
@@ -145,13 +144,7 @@ export default class Player {
 		}
 
 		// Continue jump if key is held and within max jump time
-		if (
-			this.isJumping &&
-			input.isKeyHeld(Input.KEYS.SPACE) &&
-			this.jumpTime <= PlayerConfig.maxJumpTime
-		) {
-			this.continueJump(dt);
-		} else {
+		if (!this.isJumping || !input.isKeyHeld(Input.KEYS.SPACE)) {
 			this.endJump();
 		}
 
@@ -168,20 +161,11 @@ export default class Player {
 	startJump() {
 		this.velocity.y = PlayerConfig.jumpPower;
 		this.isJumping = true;
-		this.jumpTime = 0;
 		this.jumpBuffer = 0;
-	}
-
-	continueJump(dt) {
-		this.velocity.y =
-			PlayerConfig.jumpPower *
-			(1 - this.jumpTime / PlayerConfig.maxJumpTime);
-		this.jumpTime += dt;
 	}
 
 	endJump() {
 		this.isJumping = false;
-		this.jumpTime = 0;
 	}
 
 	applyGravity(dt) {
